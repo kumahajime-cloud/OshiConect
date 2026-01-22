@@ -1,0 +1,24 @@
+<div class="timeline">
+  <h2 class="page-title">タイムライン</h2>
+
+  <div class="search-form">
+    <%= form_with url: search_posts_path, method: :get, local: true do |f| %>
+      <%= f.text_field :query, placeholder: "投稿を検索...", class: "search-input" %>
+      <%= f.submit "検索", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+
+  <div class="posts-container">
+    <% if @posts.any? %>
+      <% @posts.each do |post| %>
+        <%= render 'shared/post', post: post %>
+      <% end %>
+
+      <div class="pagination">
+        <%= paginate @posts %>
+      </div>
+    <% else %>
+      <p class="empty-message">まだ投稿がありません。</p>
+    <% end %>
+  </div>
+</div>

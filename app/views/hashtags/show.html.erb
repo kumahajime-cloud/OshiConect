@@ -1,0 +1,24 @@
+<div class="hashtag-page">
+  <div class="hashtag-header">
+    <h2 class="page-title">#<%= @hashtag.name %></h2>
+    <p class="hashtag-count"><%= @posts.total_count %>件の投稿</p>
+  </div>
+
+  <div class="posts-container">
+    <% if @posts.any? %>
+      <% @posts.each do |post| %>
+        <%= render 'shared/post', post: post %>
+      <% end %>
+
+      <div class="pagination">
+        <%= paginate @posts %>
+      </div>
+    <% else %>
+      <p class="empty-message">このハッシュタグの投稿がまだありません。</p>
+    <% end %>
+  </div>
+
+  <div class="back-link">
+    <%= link_to "← タイムラインに戻る", root_path, class: "btn btn-secondary" %>
+  </div>
+</div>

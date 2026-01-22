@@ -1,0 +1,135 @@
+<div class="profile-edit-page">
+  <h2>プロフィール編集</h2>
+
+  <%= form_with model: @user, url: profile_path(@user), local: true, class: "profile-form" do |f| %>
+    <% if @user.errors.any? %>
+      <div class="error-messages">
+        <h3><%= @user.errors.count %>件のエラーがあります</h3>
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :username, "ユーザー名" %>
+      <%= f.text_field :username, class: "form-control", required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :bio, "自己紹介" %>
+      <%= f.text_area :bio, class: "form-control", rows: 5, placeholder: "自己紹介を入力してください（任意）" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :profile_image, "プロフィール画像" %>
+      <% if @user.profile_image.attached? %>
+        <div class="current-image">
+          <%= image_tag @user.profile_image, class: "preview-image", alt: @user.username %>
+          <p class="image-note">現在の画像</p>
+        </div>
+      <% end %>
+      <%= f.file_field :profile_image, accept: "image/*", class: "form-control-file" %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit "更新する", class: "btn btn-primary" %>
+      <%= link_to "キャンセル", profile_path(@user), class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+.profile-edit-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.profile-edit-page h2 {
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.profile-form .form-group {
+  margin-bottom: 20px;
+}
+
+.profile-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.profile-form .form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.profile-form .form-control:focus {
+  outline: none;
+  border-color: #ff6b9d;
+}
+
+.profile-form textarea.form-control {
+  resize: vertical;
+}
+
+.current-image {
+  margin-bottom: 10px;
+}
+
+.preview-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+}
+
+.image-note {
+  font-size: 12px;
+  color: #888;
+  margin-top: 5px;
+}
+
+.form-control-file {
+  margin-top: 10px;
+}
+
+.form-actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 10px;
+}
+
+.error-messages {
+  background-color: #ffebee;
+  border: 1px solid #f44336;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.error-messages h3 {
+  color: #f44336;
+  margin: 0 0 10px 0;
+  font-size: 14px;
+}
+
+.error-messages ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.error-messages li {
+  color: #d32f2f;
+  font-size: 14px;
+}
+</style>

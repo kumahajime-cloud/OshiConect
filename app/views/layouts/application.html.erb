@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OshiConnect - 推し活SNS</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbolinks-track": "reload" %>
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="container">
+        <h1 class="logo">
+          <%= link_to "OshiConnect", root_path %>
+        </h1>
+        <nav class="nav">
+          <% if user_signed_in? %>
+            <%= link_to "タイムライン", root_path, class: "nav-link" %>
+            <%= link_to "投稿する", new_post_path, class: "nav-link btn-primary" %>
+            <%= link_to "マイページ", mypage_path, class: "nav-link" %>
+            <%= link_to "プロフィール", profile_path(current_user), class: "nav-link" %>
+            <%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "nav-link btn-secondary" %>
+          <% else %>
+            <%= link_to "ログイン", new_user_session_path, class: "nav-link" %>
+            <%= link_to "新規登録", new_user_registration_path, class: "nav-link btn-primary" %>
+          <% end %>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container">
+        <% if notice %>
+          <div class="alert alert-success"><%= notice %></div>
+        <% end %>
+        <% if alert %>
+          <div class="alert alert-danger"><%= alert %></div>
+        <% end %>
+
+        <%= yield %>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2026 OshiConnect. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

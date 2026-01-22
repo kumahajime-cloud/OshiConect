@@ -1,0 +1,38 @@
+<div class="mypage">
+  <h2 class="page-title">マイページ</h2>
+
+  <div class="mypage-nav">
+    <%= link_to "自分の投稿", mypage_path, class: "nav-tab #{'active' unless params[:liked]}" %>
+    <%= link_to "いいねした投稿", liked_posts_mypage_path, class: "nav-tab #{'active' if params[:liked]}" %>
+  </div>
+
+  <div class="mypage-content">
+    <div class="oshis-summary">
+      <h3>あなたの推し</h3>
+      <div class="oshis-list-inline">
+        <% if @oshis.any? %>
+          <% @oshis.each do |oshi| %>
+            <span class="oshi-badge"><%= oshi.name %></span>
+          <% end %>
+        <% else %>
+          <p class="empty-message">まだ推しが登録されていません。</p>
+        <% end %>
+        <%= link_to "プロフィールで編集", profile_path(current_user), class: "btn-link" %>
+      </div>
+    </div>
+
+    <div class="posts-container">
+      <% if @posts.any? %>
+        <% @posts.each do |post| %>
+          <%= render 'shared/post', post: post %>
+        <% end %>
+
+        <div class="pagination">
+          <%= paginate @posts %>
+        </div>
+      <% else %>
+        <p class="empty-message">まだ投稿がありません。</p>
+      <% end %>
+    </div>
+  </div>
+</div>

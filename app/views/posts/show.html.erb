@@ -1,0 +1,64 @@
+<div class="post-show">
+  <div class="post-detail">
+    <div class="post-header">
+      <div class="user-info">
+        <% if @post.user.profile_image.attached? %>
+          <%= image_tag @post.user.profile_image, class: "user-avatar", alt: @post.user.username %>
+        <% else %>
+          <div class="user-avatar-placeholder">
+            <%= @post.user.username.first %>
+          </div>
+        <% end %>
+        <div>
+          <h3 class="username"><%= link_to @post.user.username, profile_path(@post.user) %></h3>
+          <small class="post-time"><%= time_ago_in_words(@post.created_at) %>前</small>
+        </div>
+      </div>
+
+      <% if user_signed_in? && @post.user == current_user %>
+        <div class="post-actions">
+          <%= link_to "編集", edit_post_path(@post), class: "btn btn-sm btn-secondary" %>
+          <%= button_to "削除", @post, method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-sm btn-danger" %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="post-content">
+      <%= simple_format(h(@post.content).gsub(/#([一-龠ぁ-んァ-ヶーa-zA-Z0-9]+)/) { |match| link_to match, hashtag_path($1) }) %>
+    </div>
+
+    <% if @post.image.attached? %>
+      <div class="post-image">
+        <%= image_tag @post.image, alt: "投稿画像" %>
+      </div>
+    <% end %>
+
+    <div class="post-meta">
+      <div class="hashtags">
+        <% @post.hashtags.each do |hashtag| %>
+          <%= link_to "##{hashtag.name}", hashtag_path(hashtag.name), class: "hashtag-link" %>
+        <% end %>
+      </div>
+
+      <div class="post-footer">
+        <% if user_signed_in? %>
+          <% if current_user.liked?(@post) %>
+            <%= button_to unlike_post_path(@post), method: :delete, class: "btn-like liked" do %>
+              ❤️ <%= @post.likes_count %>
+            <% end %>
+          <% else %>
+            <%= button_to like_post_path(@post), method: :post, class: "btn-like" do %>
+              🤍 <%= @post.likes_count %>
+            <% end %>
+          <% end %>
+        <% else %>
+          <span class="like-count">🤍 <%= @post.likes_count %></span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="back-link">
+    <%= link_to "← タイムラインに戻る", root_path, class: "btn btn-secondary" %>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<div class="profile-page">
+  <div class="profile-header">
+    <div class="profile-info">
+      <% if @user.profile_image.attached? %>
+        <%= image_tag @user.profile_image, class: "profile-avatar", alt: @user.username %>
+      <% else %>
+        <div class="profile-avatar-placeholder">
+          <%= @user.username.first.upcase %>
+        </div>
+      <% end %>
+
+      <div class="profile-details">
+        <h2 class="profile-username"><%= @user.username %></h2>
+        <% if @user.bio.present? %>
+          <p class="profile-bio"><%= simple_format(@user.bio) %></p>
+        <% end %>
+
+        <% if user_signed_in? && @user == current_user %>
+          <%= link_to "プロフィールを編集", edit_profile_path(@user), class: "btn btn-secondary" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="oshis-section">
+      <h3>推し一覧</h3>
+      <div class="oshis-list">
+        <% if @oshis.any? %>
+          <% @oshis.each do |oshi| %>
+            <div class="oshi-item">
+              <span class="oshi-name"><%= oshi.name %></span>
+              <% if user_signed_in? && @user == current_user %>
+                <%= button_to "削除", profile_oshi_path(@user, oshi), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn-delete-oshi" %>
+              <% end %>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="empty-message">まだ推しが登録されていません。</p>
+        <% end %>
+      </div>
+
+      <% if user_signed_in? && @user == current_user %>
+        <%= form_with model: [:profile, @user, Oshi.new], url: profile_oshis_path(@user), local: true, class: "oshi-form" do |f| %>
+          <div class="form-group-inline">
+            <%= f.text_field :name, placeholder: "推しの名前を追加", class: "form-control" %>
+            <%= f.submit "追加", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="profile-posts">
+    <h3>投稿一覧 (<%= @posts.total_count %>件)</h3>
+    <div class="posts-container">
+      <% if @posts.any? %>
+        <% @posts.each do |post| %>
+          <%= render 'shared/post', post: post %>
+        <% end %>
+
+        <div class="pagination">
+          <%= paginate @posts %>
+        </div>
+      <% else %>
+        <p class="empty-message">まだ投稿がありません。</p>
+      <% end %>
+    </div>
+  </div>
+</div>
