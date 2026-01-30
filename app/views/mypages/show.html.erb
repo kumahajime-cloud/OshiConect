@@ -2,8 +2,8 @@
   <h2 class="page-title">マイページ</h2>
 
   <div class="mypage-nav">
-    <%= link_to "自分の投稿", mypage_path, class: "nav-tab #{'active' unless params[:liked]}" %>
-    <%= link_to "いいねした投稿", liked_posts_mypage_path, class: "nav-tab #{'active' if params[:liked]}" %>
+    <%= link_to "自分の投稿", mypage_path, class: "nav-tab #{'active' unless @liked}" %>
+    <%= link_to "いいねした投稿", liked_posts_mypage_path, class: "nav-tab #{'active' if @liked}" %>
   </div>
 
   <div class="mypage-content">

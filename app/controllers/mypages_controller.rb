@@ -8,6 +8,8 @@ class MypagesController < ApplicationController
 
   def liked_posts
     @posts = current_user.liked_posts.includes(:user, :hashtags).recent.page(params[:page]).per(20)
+    @oshis = current_user.oshis
+    @liked = true
     render :show
   end
 end
